@@ -171,7 +171,7 @@ print("2.4",hondaCar.drive())
 //Сделайте структуру Person и класс Car конформирующими этому протоколу.
 
 protocol Describable {
-    var description: String { get set }
+    var description: String { get }
 }
 
 struct PersonProtocol: Describable {
@@ -297,3 +297,130 @@ print("Книга 2 \(book2.title) \(book2.author)")
 var coord3 = Point(x: 10, y: 12)
 var coord4 = Point(x: 10, y: 12)
 print(coord3.isEqual(to: coord4))
+
+//Task 4.1
+//Хранение массива объектов
+//Создайте класс Student с свойствами name и grade.
+//Создайте класс Classroom, который хранит массив студентов и содержит методы:
+//addStudent(_:): добавляет студента в класс.
+//removeStudent(_:): удаляет студента из класса.
+//getAverageGrade(): возвращает средний балл всех студентов.
+
+class Student {
+    let name: String
+    var grade: Double
+    init(name: String, grade: Double) {
+        self.name = name
+        self.grade = grade
+    }
+}
+
+class Classroom {
+    var classArr: [Student]
+    init(classArr: [Student]) {
+        self.classArr = classArr
+    }
+    
+    func addStudent(addedStudent: Student) {
+        classArr.append(addedStudent)
+    }
+    
+    func removeStudent(removedStudent: Student) {
+        var isInArray = false
+        var studentIndex = Int()
+        if !classArr.isEmpty {
+            for (index,student) in classArr.enumerated() {
+                if student === removedStudent {
+                    isInArray = true
+                    studentIndex = index
+                    break
+                }
+            }
+            if isInArray {
+                classArr.remove(at: studentIndex)
+            }
+        } else {
+            print("Класс пустой, некого удалять")
+        }
+        
+    }
+    
+    func getAverageGrade() -> Double? {
+        guard !classArr.isEmpty else {
+            return nil
+        }
+        var gradeSum = Double()
+        for student in classArr{
+            gradeSum += student.grade
+        }
+        return gradeSum/Double(classArr.count)
+    }
+    
+    func printArr(){
+        for student in classArr {
+            print(student.name, student.grade)
+        }
+        
+    }
+}
+
+let student1 = Student(name: "Anna", grade: 7)
+let student2 = Student(name: "Pavel", grade: 10)
+let student3 = Student(name: "Artem", grade: 15)
+
+let classArr = Classroom(classArr: [])
+
+classArr.addStudent(addedStudent: student1)
+classArr.addStudent(addedStudent: student2)
+classArr.addStudent(addedStudent: student3)
+classArr.printArr()
+
+classArr.removeStudent(removedStudent: student3)
+classArr.printArr()
+
+if let averageGrade = classArr.getAverageGrade() {
+    print("Средний балл ", averageGrade)
+} else {
+    print("Массив пустой")
+}
+
+
+//Task 4.2
+//Константные свойства
+//Создайте класс Circle с свойством radius и константным свойством pi = 3.14159 .
+//Добавьте вычисляемое свойство area, которое вычисляет площадь круга.
+
+class Circle {
+    var radius: Double
+    let pi = 3.14159
+    var area: Double{
+        return radius * radius * pi
+    }
+    init(radius: Double) {
+        self.radius = radius
+    }
+    
+}
+
+let circleArea = Circle(radius: 5)
+print(circleArea.area)
+
+//Task 4.3
+//Расширения
+//Создайте расширение для класса String, которое добавляет метод isPalindrome(), проверяющий, является ли строка палиндромом.
+
+extension String {
+    func isPalindrome() -> Bool {
+        if self.isEmpty {
+            return false
+        }
+        if self.lowercased() == String(self.lowercased().reversed()) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+}
+let word = "radar"
+print(word.isPalindrome())
